@@ -8,6 +8,8 @@ use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\QrAuthenticationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DokumenController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -24,16 +26,23 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
     Route::middleware('role:view')->group(function () {
         Route::get('jabatan-fungsional', [JabatanFungsionalController::class, 'index'])->name('jabatan.index');
         Route::get('jabatan-fungsional/{jabatan}', [JabatanFungsionalController::class, 'show'])->name('jabatan.show');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
         Route::get('monitoring/{monitoring}', [MonitoringController::class, 'show'])->name('monitoring.show');
+
+        Route::resource('dokumen', DokumenController::class);
     });
 
     Route::middleware('role:view,User')->group(function () {
         Route::get('user', [UserController::class, 'index'])->name('user.index');
+        Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::put('user/{user}', [UserController::class, 'update'])->name('user.update');
     });
 
     Route::middleware('role:view,Audit Log')->group(function () {
