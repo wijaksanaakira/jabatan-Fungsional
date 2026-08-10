@@ -13,9 +13,11 @@
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama dokumen..." class="w-full sm:w-64 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
                 <button type="submit" class="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 transition-colors">Cari</button>
             </form>
-            <a href="{{ route('dokumen.create') }}" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-center">
-                Tambah Dokumen
-            </a>
+            @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                <a href="{{ route('dokumen.create') }}" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-center">
+                    Tambah Dokumen
+                </a>
+            @endif
         </div>
     </div>
 
@@ -43,12 +45,16 @@
                                 {{ $dokumen->created_at ? $dokumen->created_at->format('d M Y') : '-' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('dokumen.edit', $dokumen->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                <form action="{{ route('dokumen.destroy', $dokumen->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
-                                </form>
+                                @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                                    <a href="{{ route('dokumen.edit', $dokumen->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                    <form action="{{ route('dokumen.destroy', $dokumen->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                    </form>
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
                             </td>
                         </tr>
                     @empty
