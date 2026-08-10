@@ -8,10 +8,17 @@
             <p class="mt-1 text-sm text-slate-500">Kelola daftar jabatan fungsional dan dokumennya.</p>
         </div>
 
-        <form action="{{ route('jabatan.index') }}" method="GET" class="flex w-full sm:w-auto gap-2">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari jabatan..." class="w-full sm:w-64 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-            <x-button type="secondary" type="submit">Cari</x-button>
-        </form>
+        <div class="flex flex-col sm:flex-row w-full sm:w-auto gap-2">
+            <form action="{{ route('jabatan.index') }}" method="GET" class="flex w-full sm:w-auto gap-2">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari jabatan..." class="w-full sm:w-64 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                <x-button type="secondary" type="submit">Cari</x-button>
+            </form>
+            @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                <a href="{{ route('jabatan.create') }}" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-center whitespace-nowrap">
+                    Tambah Jabatan
+                </a>
+            @endif
+        </div>
     </div>
 
     <x-table>
@@ -52,7 +59,15 @@
                     </span>
                 </x-table.cell>
                 <x-table.cell>
-                    <a href="{{ route('jabatan.show', $jabatan->id) }}" class="text-blue-600 hover:text-blue-900 font-medium">Detail</a>
+                    <a href="{{ route('jabatan.show', $jabatan->id) }}" class="text-blue-600 hover:text-blue-900 font-medium mr-2">Detail</a>
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                        <a href="{{ route('jabatan.edit', $jabatan->id) }}" class="text-indigo-600 hover:text-indigo-900 font-medium mr-2">Edit</a>
+                        <form action="{{ route('jabatan.destroy', $jabatan->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jabatan fungsional ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-900 font-medium">Hapus</button>
+                        </form>
+                    @endif
                 </x-table.cell>
             </x-table.row>
         @empty
