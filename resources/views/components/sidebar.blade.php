@@ -24,6 +24,10 @@
             <i class="bi bi-briefcase-fill mr-3 text-lg"></i>
             Daftar Jabatan
         </a>
+        <a href="{{ route('dokumen.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl {{ request()->routeIs('dokumen.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' }}">
+            <i class="bi bi-file-earmark-text-fill mr-3 text-lg"></i>
+            Dokumen
+        </a>
 
         @if(Auth::user()->isSuperAdmin())
         <div class="pt-4 pb-2">

@@ -59,9 +59,9 @@
                     @endif
                 </x-table.cell>
                 <x-table.cell>
-                    <button class="text-blue-600 hover:text-blue-900 font-medium mr-3">Edit</button>
+                    <a href="{{ route('user.edit', $user->id) }}" class="text-blue-600 hover:text-blue-900 font-medium mr-3">Edit</a>
                     @if(Auth::user()->isSuperAdmin() && $user->id !== Auth::id())
-                        <button class="text-red-600 hover:text-red-900 font-medium">Nonaktifkan</button>
+                        <!-- Placeholder for explicit disable button if needed, but it's handled in edit form -->
                     @endif
                 </x-table.cell>
             </x-table.row>

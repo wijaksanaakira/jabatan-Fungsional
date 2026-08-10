@@ -55,7 +55,7 @@
                         </button>
 
                         <div x-show="userMenuOpen" @click.away="userMenuOpen = false" class="absolute right-0 w-48 mt-2 py-2 bg-white border border-slate-200 rounded-lg shadow-xl" style="display: none;">
-                            <a href="#" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"><i class="bi bi-person mr-2"></i> Profil Saya</a>
+                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"><i class="bi bi-person mr-2"></i> Profil Saya</a>
                             <div class="border-t border-slate-200 my-1"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
