@@ -10,6 +10,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\DokumenJabatanFungsionalController;
+use App\Http\Controllers\QrGeneratorController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -52,6 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:edit')->put('dokumen/{dokuman}', [DokumenController::class, 'update'])->name('dokumen.update');
     Route::middleware('role:delete')->delete('dokumen/{dokuman}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
 
+    // Dokumen Jabatan
+    Route::middleware('role:create')->get('dokumen-jabatan/create', [DokumenJabatanFungsionalController::class, 'create'])->name('dokumen-jabatan.create');
+    Route::middleware('role:create')->post('dokumen-jabatan', [DokumenJabatanFungsionalController::class, 'store'])->name('dokumen-jabatan.store');
+    Route::middleware('role:edit')->get('dokumen-jabatan/{dokumenJabatan}/edit', [DokumenJabatanFungsionalController::class, 'edit'])->name('dokumen-jabatan.edit');
+    Route::middleware('role:edit')->put('dokumen-jabatan/{dokumenJabatan}', [DokumenJabatanFungsionalController::class, 'update'])->name('dokumen-jabatan.update');
+    Route::middleware('role:delete')->delete('dokumen-jabatan/{dokumenJabatan}', [DokumenJabatanFungsionalController::class, 'destroy'])->name('dokumen-jabatan.destroy');
+
     Route::middleware('role:view,User')->group(function () {
         Route::get('user', [UserController::class, 'index'])->name('user.index');
         Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
@@ -64,5 +73,14 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:view,QR Auth')->group(function () {
         Route::get('qr-auth', [QrAuthenticationController::class, 'index'])->name('qr.index');
+    });
+
+    // QR Code Generator (Accessible by Admin/Super Admin based on role:create requirement or specific modul access)
+    // We will use standard auth for now, or you can adjust to role:create/role:view as needed. Let's make it accessible to logged in users, or map it to a specific permission.
+    // Given the prompt "buat menu baru generate qr code dari sebuah link", it's a general utility. Let's place it under role:create for safety or just auth if it's open.
+    // I'll make it require role:create so only admins can generate QRs.
+    Route::middleware('role:create')->group(function () {
+        Route::get('qr-generator', [QrGeneratorController::class, 'index'])->name('qr-generator.index');
+        Route::post('qr-generator', [QrGeneratorController::class, 'generate'])->name('qr-generator.generate');
     });
 });

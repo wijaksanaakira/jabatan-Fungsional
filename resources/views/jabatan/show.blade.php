@@ -59,7 +59,14 @@
         <div class="p-6">
             <!-- Dokumen Tab -->
             <div x-show="tab === 'dokumen'">
-                <h3 class="text-lg font-medium text-slate-900 mb-4">Dokumen Jabatan</h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-slate-900">Dokumen Jabatan</h3>
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                        <a href="{{ route('dokumen-jabatan.create', ['jabatan_id' => $jabatan->id]) }}" class="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                            Tambah Dokumen
+                        </a>
+                    @endif
+                </div>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-slate-200">
                         <thead class="bg-slate-50">
@@ -78,7 +85,15 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">Rp {{ number_format($dok->jumlah_tunjangan, 0, ',', '.') }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     @if($dok->link)
-                                    <a href="{{ $dok->link }}" target="_blank" class="text-blue-600 hover:text-blue-900">Lihat File</a>
+                                    <a href="{{ $dok->link }}" target="_blank" class="text-blue-600 hover:text-blue-900 mr-2">Lihat File</a>
+                                    @endif
+                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->isAdmin())
+                                        <a href="{{ route('dokumen-jabatan.edit', $dok->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</a>
+                                        <form action="{{ route('dokumen-jabatan.destroy', $dok->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Hapus</button>
+                                        </form>
                                     @endif
                                 </td>
                             </tr>
