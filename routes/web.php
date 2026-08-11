@@ -11,6 +11,7 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\DokumenJabatanFungsionalController;
+use App\Http\Controllers\QrGeneratorController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -72,5 +73,14 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:view,QR Auth')->group(function () {
         Route::get('qr-auth', [QrAuthenticationController::class, 'index'])->name('qr.index');
+    });
+
+    // QR Code Generator (Accessible by Admin/Super Admin based on role:create requirement or specific modul access)
+    // We will use standard auth for now, or you can adjust to role:create/role:view as needed. Let's make it accessible to logged in users, or map it to a specific permission.
+    // Given the prompt "buat menu baru generate qr code dari sebuah link", it's a general utility. Let's place it under role:create for safety or just auth if it's open.
+    // I'll make it require role:create so only admins can generate QRs.
+    Route::middleware('role:create')->group(function () {
+        Route::get('qr-generator', [QrGeneratorController::class, 'index'])->name('qr-generator.index');
+        Route::post('qr-generator', [QrGeneratorController::class, 'generate'])->name('qr-generator.generate');
     });
 });

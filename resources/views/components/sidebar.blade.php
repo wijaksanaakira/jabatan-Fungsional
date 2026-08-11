@@ -39,6 +39,14 @@
         </a>
 
         <div class="pt-4 pb-2">
+            <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Utilities</p>
+        </div>
+        <a href="{{ route('qr-generator.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl {{ request()->routeIs('qr-generator.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' }}">
+            <i class="bi bi-qr-code mr-3 text-lg"></i>
+            QR Generator
+        </a>
+
+        <div class="pt-4 pb-2">
             <p class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Setting</p>
         </div>
         <a href="{{ route('user.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl {{ request()->routeIs('user.*') ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-800 hover:text-white transition-colors' }}">
